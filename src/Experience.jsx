@@ -15,27 +15,26 @@ export default function Experience() {
     const sphereRedRef = useRef()
     const controlsRef = useRef()
 
-    const target = new THREE.Object3D()
-
     const animateCameraToTarget = (targetPosition) => {
         const currentPosition = camera.position.clone()
+        const currentTarget = controlsRef.current.target.clone()
 
         // Tween the camera target
-        new TWEEN.Tween(target.position)
+        new TWEEN.Tween(currentTarget)
             .to(targetPosition, 3000)
             .easing(TWEEN.Easing.Quadratic.Out)
             .onUpdate(() => {
-                camera.lookAt(target.position)
-                controlsRef.current.target.copy(target.position)
+                camera.lookAt(currentTarget)
             })
             .start()
 
         // Tween the camera position
         new TWEEN.Tween(currentPosition)
-            .to({ x: targetPosition.x + 5, y: targetPosition.y + 3, z: targetPosition.z + 5 }, 3000)
+            .to({ x: targetPosition.x * 3, y: targetPosition.y + 2, z: targetPosition.z * 3 }, 3000)
             .easing(TWEEN.Easing.Quadratic.Out)
             .onUpdate(() => {
                 camera.position.copy(currentPosition)
+                controlsRef.current.target.copy(currentTarget)
             })
             .start()
     }
